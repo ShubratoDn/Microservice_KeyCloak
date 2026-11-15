@@ -48,4 +48,8 @@ public class OrderItem {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    public BigDecimal getLineTotal() {
+        return unitPrice.multiply(BigDecimal.valueOf(quantity));
+    }
 }

@@ -73,10 +73,18 @@ public class Order {
     public void addItem(OrderItem item) {
         items.add(item);
         item.setOrder(this);
+        recalculateTotal();
     }
 
     public void removeItem(OrderItem item) {
         items.remove(item);
         item.setOrder(null);
+        recalculateTotal();
+    }
+
+    private void recalculateTotal() {
+        totalAmount = items.stream()
+                .map(OrderItem::getLineTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
