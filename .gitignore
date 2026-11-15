@@ -1,1 +1,67 @@
-.idea
+### Build output ###
+target/
+build/
+out/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Maven ###
+.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+
+### Eclipse / STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### OS files ###
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Logs and temp files ###
+*.log
+logs/
+*.tmp
+*.swp
+HELP.md
+
+### Secrets and local settings ###
+.env
+.env.*
+*.local.properties
+application-local.properties
+application-local.yml
+*.pem
+*.key
+*.p12
+*.jks
+
+### Claude Code (local settings) ###
+.claude/settings.local.json
