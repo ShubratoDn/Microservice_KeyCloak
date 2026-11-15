@@ -340,6 +340,847 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "product-service",
+      "item": [
+        {
+          "name": "Categories",
+          "item": [
+            {
+              "name": "Create Category",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories"
+                  ]
+                },
+                "description": "Creates a category. The returned id is saved in the collection variable `categoryId`.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Phones, laptops and accessories\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 201 Created', function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test('Location header is present', function () {",
+                      "    pm.response.to.have.header('Location');",
+                      "});",
+                      "",
+                      "var body = pm.response.json();",
+                      "pm.collectionVariables.set('categoryId', body.id);"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create Category - Duplicate Name",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories"
+                  ]
+                },
+                "description": "Sends the same name again. Expect 409 because category names must be unique (ignoring upper/lower case).",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"electronics\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 409 Conflict', function () {",
+                      "    pm.response.to.have.status(409);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Category by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories/{{categoryId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                },
+                "description": "Gets one category. Returns 404 if the id does not exist."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "List Categories",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories"
+                  ]
+                },
+                "description": "Gets all categories, sorted by name."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Response is a list', function () {",
+                      "    pm.expect(pm.response.json()).to.be.an('array');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Category",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories/{{categoryId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                },
+                "description": "Replaces the name and description of the category.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Electronics & Gadgets\",\n  \"description\": \"Phones, laptops, accessories and gadgets\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Products",
+          "item": [
+            {
+              "name": "Create Product",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "description": "Creates a product in the category saved in `categoryId`. The returned id is saved in `productId`. The SKU is stored in upper case.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Wireless Mouse\",\n  \"description\": \"Ergonomic wireless mouse with USB receiver\",\n  \"sku\": \"mouse-001\",\n  \"price\": 24.99,\n  \"stockQuantity\": 50,\n  \"status\": \"ACTIVE\",\n  \"categoryId\": {{categoryId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 201 Created', function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test('SKU is upper case', function () {",
+                      "    pm.expect(pm.response.json().sku).to.eql('MOUSE-001');",
+                      "});",
+                      "",
+                      "var body = pm.response.json();",
+                      "pm.collectionVariables.set('productId', body.id);"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create Product - Duplicate SKU",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "description": "Sends the same SKU again. Expect 409 because SKUs must be unique.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Wireless Mouse\",\n  \"description\": \"Ergonomic wireless mouse with USB receiver\",\n  \"sku\": \"mouse-001\",\n  \"price\": 24.99,\n  \"stockQuantity\": 50,\n  \"status\": \"ACTIVE\",\n  \"categoryId\": {{categoryId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 409 Conflict', function () {",
+                      "    pm.response.to.have.status(409);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create Product - Validation Error",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "description": "Sends a bad request on purpose. Expect 400 with an `errors` object that shows which fields are wrong.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"\",\n  \"sku\": \"bad sku!\",\n  \"price\": -5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 400 Bad Request', function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test('Response lists the invalid fields', function () {",
+                      "    pm.expect(pm.response.json().errors).to.be.an('object');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create Product - Unknown Category",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ]
+                },
+                "description": "Uses a category id that does not exist. Expect 404.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Wireless Mouse\",\n  \"description\": \"Ergonomic wireless mouse with USB receiver\",\n  \"sku\": \"keyboard-001\",\n  \"price\": 24.99,\n  \"stockQuantity\": 50,\n  \"status\": \"ACTIVE\",\n  \"categoryId\": 999999\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 404 Not Found', function () {",
+                      "    pm.response.to.have.status(404);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Product by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}"
+                  ]
+                },
+                "description": "Gets one product with its category. Returns 404 if the id does not exist."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "List Products",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products?page=0&size=20&sort=id,desc&categoryId={{categoryId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0",
+                      "description": "Page number. It starts from 0."
+                    },
+                    {
+                      "key": "size",
+                      "value": "20",
+                      "description": "How many products in one page."
+                    },
+                    {
+                      "key": "sort",
+                      "value": "id,desc",
+                      "description": "Sort field and direction (asc or desc)."
+                    },
+                    {
+                      "key": "categoryId",
+                      "value": "{{categoryId}}",
+                      "description": "Only products in this category."
+                    },
+                    {
+                      "key": "status",
+                      "value": "ACTIVE",
+                      "description": "Only products with this status.",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "mouse",
+                      "description": "Search text in name or SKU.",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "Gets products page by page. Optional filters: `categoryId`, `status` (DRAFT, ACTIVE, OUT_OF_STOCK, DISCONTINUED) and `q` (search in name or SKU). Turn a filter on or off with its checkbox."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Response has page details', function () {",
+                      "    var body = pm.response.json();",
+                      "    pm.expect(body).to.have.property('content');",
+                      "    pm.expect(body).to.have.property('totalElements');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "List Products - Invalid Sort",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products?sort=banana,asc",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "banana,asc"
+                    }
+                  ]
+                },
+                "description": "Sorts by a field that does not exist. Expect 400 (not a server error)."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 400 Bad Request', function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Product",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}"
+                  ]
+                },
+                "description": "Replaces the product details. If `status` or `stockQuantity` is left out, the current value is kept.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Wireless Mouse Pro\",\n  \"description\": \"Ergonomic wireless mouse with Bluetooth and USB receiver\",\n  \"sku\": \"mouse-001\",\n  \"price\": 29.99,\n  \"stockQuantity\": 40,\n  \"status\": \"ACTIVE\",\n  \"categoryId\": {{categoryId}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Product Status",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}/status",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}",
+                    "status"
+                  ]
+                },
+                "description": "Changes only the status. Allowed values: DRAFT, ACTIVE, OUT_OF_STOCK, DISCONTINUED.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"DISCONTINUED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Status was changed', function () {",
+                      "    pm.expect(pm.response.json().status).to.eql('DISCONTINUED');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Product Stock",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}/stock",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}",
+                    "stock"
+                  ]
+                },
+                "description": "Sets the stock quantity. It cannot be negative.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"quantity\": 75\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 200 OK', function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test('Stock was changed', function () {",
+                      "    pm.expect(pm.response.json().stockQuantity).to.eql(75);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cleanup",
+          "item": [
+            {
+              "name": "Delete Category - Still Has Products",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories/{{categoryId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                },
+                "description": "Tries to delete the category while it still has a product. Expect 409."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 409 Conflict', function () {",
+                      "    pm.response.to.have.status(409);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Delete Product",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "products",
+                    "{{productId}}"
+                  ]
+                },
+                "description": "Deletes the product."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 204 No Content', function () {",
+                      "    pm.response.to.have.status(204);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Delete Category",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{productBaseUrl}}/api/v1/categories/{{categoryId}}",
+                  "host": [
+                    "{{productBaseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "categories",
+                    "{{categoryId}}"
+                  ]
+                },
+                "description": "Deletes the category. This works now because it has no products left."
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('Status is 204 No Content', function () {",
+                      "    pm.response.to.have.status(204);",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
@@ -350,6 +1191,21 @@
     },
     {
       "key": "customerId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "productBaseUrl",
+      "value": "http://localhost:8082",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "productId",
       "value": "1",
       "type": "string"
     }
