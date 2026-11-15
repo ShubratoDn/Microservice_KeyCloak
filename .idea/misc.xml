@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/java-services/config-server/pom.xml" />
         <option value="$PROJECT_DIR$/java-services/discovery/pom.xml" />
         <option value="$PROJECT_DIR$/java-services/customer/pom.xml" />
+        <option value="$PROJECT_DIR$/product/pom.xml" />
+        <option value="$PROJECT_DIR$/java-services/product/pom.xml" />
       </list>
     </option>
   </component>
