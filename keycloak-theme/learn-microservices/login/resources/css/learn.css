@@ -1,0 +1,612 @@
+/* ==========================================================================
+   Learn Microservices - Keycloak login theme
+   Loaded after the default Keycloak (PatternFly 5) styles, so these rules win.
+   Colors match the React app (react-frontend/src/styles/global.css).
+   ========================================================================== */
+
+:root {
+  --lm-bg: #ffffff;
+  --lm-surface: #ffffff;
+  --lm-text: #1c2333;
+  --lm-muted: #65708a;
+  --lm-border: #cfd6e4;
+  --lm-border-hover: #aab4c8;
+  --lm-input-bg: #ffffff;
+  --lm-primary: #3b5bdb;
+  --lm-primary-hover: #2f4bc0;
+  --lm-primary-text: #ffffff;
+  --lm-focus: rgb(59 91 219 / 28%);
+  --lm-danger: #c92a2a;
+  --lm-danger-bg: #fdecec;
+  --lm-danger-fg: #a61e1e;
+  --lm-success-bg: #e6f6ec;
+  --lm-success-fg: #17693a;
+  --lm-warning-bg: #fff4dc;
+  --lm-warning-fg: #7a4f00;
+  --lm-info-bg: #e7efff;
+  --lm-info-fg: #2646b8;
+
+  /* brand panel */
+  --lm-brand-bg: #0c1631;
+  --lm-brand-text: #f2f5fc;
+  --lm-brand-muted: #9fb0d3;
+  --lm-brand-line: rgb(159 176 211 / 38%);
+  --lm-brand-node: rgb(159 176 211 / 10%);
+
+  --lm-radius: 8px;
+  --lm-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.pf-v5-theme-dark {
+  --lm-bg: #11151f;
+  --lm-surface: #1a2030;
+  --lm-text: #e8ebf4;
+  --lm-muted: #9aa5c0;
+  --lm-border: #38415b;
+  --lm-border-hover: #53607f;
+  --lm-input-bg: #151a28;
+  --lm-primary: #6f8cff;
+  --lm-primary-hover: #8aa1ff;
+  --lm-primary-text: #0d1220;
+  --lm-focus: rgb(111 140 255 / 34%);
+  --lm-danger: #ff7b7b;
+  --lm-danger-bg: #3d1717;
+  --lm-danger-fg: #ffa3a3;
+  --lm-success-bg: #123524;
+  --lm-success-fg: #6fdc9b;
+  --lm-warning-bg: #3a2c0c;
+  --lm-warning-fg: #ffd37a;
+  --lm-info-bg: #17254d;
+  --lm-info-fg: #9db4ff;
+  --lm-brand-bg: #0a0f1d;
+}
+
+/* ---------- Page ---------- */
+
+html,
+body#keycloak-bg {
+  min-height: 100%;
+}
+
+body#keycloak-bg,
+.login-pf body#keycloak-bg {
+  margin: 0;
+  background: var(--lm-bg) !important;
+  color: var(--lm-text);
+  font-family: var(--lm-font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.lm-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+  min-height: 100vh;
+}
+
+/* ---------- Brand panel (left) ---------- */
+
+.lm-brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(2rem, 4vw, 3.5rem);
+  color: var(--lm-brand-text);
+  background-color: var(--lm-brand-bg);
+  /* faint dot grid, the only decoration */
+  background-image: radial-gradient(rgb(159 176 211 / 16%) 1px, transparent 1px);
+  background-size: 22px 22px;
+  overflow: hidden;
+}
+
+.lm-brand-top,
+.lm-mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lm-mark-bg {
+  fill: var(--lm-primary);
+}
+
+.lm-brand .lm-mark-bg {
+  fill: #3b5bdb;
+}
+
+.lm-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.lm-brand-body {
+  max-width: 36rem;
+}
+
+.lm-eyebrow {
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lm-brand-muted);
+}
+
+.lm-headline {
+  margin: 0 0 1rem;
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+  font-weight: 650;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--lm-brand-text);
+}
+
+.lm-lead {
+  margin: 0 0 2.25rem;
+  max-width: 30rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--lm-brand-muted);
+}
+
+/* Architecture diagram: client > gateway > services, Keycloak checks the token */
+.lm-diagram {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  height: auto;
+  font-family: var(--lm-font);
+}
+
+.lm-d-lines path {
+  stroke: var(--lm-brand-line);
+  stroke-width: 1.4;
+}
+
+.lm-d-lines .lm-d-dash {
+  stroke-dasharray: 3 4;
+}
+
+.lm-d-node rect {
+  fill: var(--lm-brand-node);
+  stroke: var(--lm-brand-line);
+  stroke-width: 1.2;
+}
+
+.lm-d-gateway {
+  fill: #3b5bdb;
+}
+
+.lm-d-text text {
+  fill: var(--lm-brand-text);
+  font-size: 13px;
+  font-weight: 500;
+  dominant-baseline: middle;
+}
+
+.lm-d-text .lm-d-gateway-text {
+  fill: #fff;
+  font-weight: 600;
+}
+
+.lm-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--lm-brand-muted);
+}
+
+.lm-facts li {
+  position: relative;
+  padding-left: 0.9rem;
+}
+
+.lm-facts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6f8cff;
+}
+
+/* ---------- Form panel (right) ---------- */
+
+.lm-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 2rem clamp(1.25rem, 4vw, 3.5rem);
+  background: var(--lm-bg);
+  border-left: 1px solid var(--lm-border);
+}
+
+.lm-panel-inner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.lm-mobile-brand {
+  display: none;
+  margin-bottom: 1.5rem;
+  color: var(--lm-text);
+}
+
+.lm-legal {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--lm-muted);
+}
+
+/* Undo the stock PatternFly card layout, keep its inner pieces */
+.lm-panel .pf-v5-c-login {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  background: none;
+}
+
+.lm-panel .pf-v5-c-login__container {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.lm-panel .pf-v5-c-login__main {
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.lm-panel .pf-v5-c-login__main-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0;
+  border: 0;
+  margin-bottom: 0.4rem;
+}
+
+.lm-panel .pf-v5-c-login__main-body,
+.lm-panel .pf-v5-c-login__main-footer {
+  padding: 0;
+}
+
+#kc-page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--lm-text);
+}
+
+.lm-subtitle {
+  margin: 0 0 1.75rem;
+  color: var(--lm-muted);
+}
+
+.lm-panel .pf-v5-c-login__main-header + .pf-v5-c-login__main-body {
+  margin-top: 1.5rem;
+}
+
+/* ---------- Form ---------- */
+
+.lm-panel .pf-v5-c-form {
+  --pf-v5-c-form--GridGap: 1.1rem;
+  gap: 1.1rem;
+}
+
+.lm-panel .pf-v5-c-form__group-label {
+  padding-bottom: 0.35rem;
+}
+
+.lm-panel .pf-v5-c-form__label-text {
+  font-size: 0.875rem;
+  font-weight: 550;
+  color: var(--lm-text);
+}
+
+/* Text boxes: one clean bordered box, no PatternFly underline */
+.lm-panel .pf-v5-c-form-control,
+.lm-panel .pf-v5-c-input-group {
+  min-height: 44px;
+  border: 1px solid var(--lm-border);
+  border-radius: var(--lm-radius);
+  background: var(--lm-input-bg);
+  box-shadow: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lm-panel .pf-v5-c-form-control::before,
+.lm-panel .pf-v5-c-form-control::after,
+.lm-panel .pf-v5-c-input-group::before,
+.lm-panel .pf-v5-c-input-group::after {
+  display: none;
+}
+
+.lm-panel .pf-v5-c-form-control:hover,
+.lm-panel .pf-v5-c-input-group:hover {
+  border-color: var(--lm-border-hover);
+}
+
+.lm-panel .pf-v5-c-form-control:focus-within,
+.lm-panel .pf-v5-c-input-group:focus-within {
+  border-color: var(--lm-primary);
+  box-shadow: 0 0 0 3px var(--lm-focus);
+}
+
+.lm-panel .pf-v5-c-form-control > input,
+.lm-panel .pf-v5-c-form-control > select {
+  min-height: 42px;
+  padding: 0 0.85rem;
+  font: inherit;
+  color: var(--lm-text);
+  background: transparent;
+  outline: none;
+}
+
+.lm-panel .pf-v5-c-form-control > input::placeholder {
+  color: var(--lm-muted);
+}
+
+/* Field inside a group (password + eye button, attempted username + restart) */
+.lm-panel .pf-v5-c-input-group {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.lm-panel .pf-v5-c-input-group .pf-v5-c-form-control {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lm-panel .pf-v5-c-input-group .pf-v5-c-input-group__item:last-child {
+  display: flex;
+}
+
+.lm-panel .pf-v5-c-input-group .pf-v5-c-button.pf-m-control {
+  min-height: 0;
+  width: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--lm-muted);
+  box-shadow: none;
+}
+
+.lm-panel .pf-v5-c-input-group .pf-v5-c-button.pf-m-control:hover {
+  color: var(--lm-text);
+  background: transparent;
+}
+
+.lm-panel .pf-v5-c-input-group .pf-v5-c-button.pf-m-control::after {
+  display: none;
+}
+
+.lm-panel .pf-v5-c-form-control.pf-m-readonly input {
+  color: var(--lm-muted);
+}
+
+/* Error state */
+.lm-panel .pf-v5-c-form-control.pf-m-error,
+.lm-panel .pf-v5-c-input-group:has(.pf-m-error) {
+  border-color: var(--lm-danger);
+}
+
+.lm-panel .pf-v5-c-form-control.pf-m-error:focus-within,
+.lm-panel .pf-v5-c-input-group:has(.pf-m-error):focus-within {
+  box-shadow: 0 0 0 3px rgb(201 42 42 / 22%);
+}
+
+.lm-panel .pf-v5-c-helper-text__item-text.pf-m-error {
+  color: var(--lm-danger);
+  font-size: 0.85rem;
+}
+
+.lm-panel .pf-v5-c-form__helper-text,
+.lm-panel .pf-v5-c-helper-text {
+  font-size: 0.85rem;
+}
+
+/* ---------- Buttons ---------- */
+
+.lm-panel .pf-v5-c-button {
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--lm-radius);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.lm-panel .pf-v5-c-button::after {
+  display: none;
+}
+
+.lm-panel .pf-v5-c-button.pf-m-primary {
+  background: var(--lm-primary);
+  color: var(--lm-primary-text);
+}
+
+.lm-panel .pf-v5-c-button.pf-m-primary:hover {
+  background: var(--lm-primary-hover);
+}
+
+.lm-panel .pf-v5-c-button.pf-m-primary:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.lm-panel .pf-v5-c-button:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px var(--lm-focus);
+}
+
+.lm-panel .pf-v5-c-button.pf-m-secondary,
+.lm-panel .pf-v5-c-button.pf-m-tertiary {
+  border: 1px solid var(--lm-border);
+  background: transparent;
+  color: var(--lm-text);
+}
+
+.lm-panel .pf-v5-c-button.pf-m-secondary:hover,
+.lm-panel .pf-v5-c-button.pf-m-tertiary:hover {
+  border-color: var(--lm-border-hover);
+  background: rgb(127 140 170 / 10%);
+}
+
+.lm-panel .pf-v5-c-form__actions {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* ---------- Links, checkbox, helpers ---------- */
+
+.lm-panel a {
+  color: var(--lm-primary);
+  text-decoration: none;
+}
+
+.lm-panel a:hover {
+  text-decoration: underline;
+}
+
+.lm-panel .pf-v5-c-check__label {
+  font-size: 0.9rem;
+  color: var(--lm-text);
+}
+
+.lm-panel .pf-v5-c-check__input {
+  accent-color: var(--lm-primary);
+}
+
+.lm-panel .pf-v5-c-login__main-footer-band {
+  margin-top: 1.5rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--lm-border);
+  background: transparent;
+  text-align: center;
+  color: var(--lm-muted);
+}
+
+.lm-panel .pf-v5-c-login__main-footer-band-item {
+  font-size: 0.9rem;
+}
+
+.lm-panel hr {
+  border-color: var(--lm-border);
+}
+
+/* ---------- Messages ---------- */
+
+.lm-panel .pf-v5-c-alert.pf-m-inline {
+  --pf-v5-c-alert--BorderColor: transparent;
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: var(--lm-radius);
+  box-shadow: none;
+  font-size: 0.9rem;
+}
+
+.lm-panel .pf-v5-c-alert.pf-m-inline::before {
+  display: none;
+}
+
+.lm-panel .pf-v5-c-alert.pf-m-danger {
+  background: var(--lm-danger-bg);
+  border-color: rgb(201 42 42 / 25%);
+  color: var(--lm-danger-fg);
+}
+
+.lm-panel .pf-v5-c-alert.pf-m-success {
+  background: var(--lm-success-bg);
+  border-color: rgb(23 105 58 / 25%);
+  color: var(--lm-success-fg);
+}
+
+.lm-panel .pf-v5-c-alert.pf-m-warning {
+  background: var(--lm-warning-bg);
+  border-color: rgb(122 79 0 / 25%);
+  color: var(--lm-warning-fg);
+}
+
+.lm-panel .pf-v5-c-alert.pf-m-info {
+  background: var(--lm-info-bg);
+  border-color: rgb(38 70 184 / 25%);
+  color: var(--lm-info-fg);
+}
+
+.lm-panel .pf-v5-c-alert .pf-v5-c-alert__icon,
+.lm-panel .pf-v5-c-alert .kc-feedback-text {
+  color: inherit;
+}
+
+/* Language picker, when more than one language is enabled */
+.lm-panel .pf-v5-c-login__main-header-utilities .pf-v5-c-form-control {
+  min-height: 34px;
+  font-size: 0.85rem;
+}
+
+.lm-panel .pf-v5-c-login__main-header-utilities .pf-v5-c-form-control > select {
+  min-height: 32px;
+  padding: 0 1.6rem 0 0.6rem;
+}
+
+/* ---------- Smaller screens ---------- */
+
+@media (max-width: 960px) {
+  .lm-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lm-brand {
+    display: none;
+  }
+
+  .lm-mobile-brand {
+    display: flex;
+  }
+
+  .lm-panel {
+    min-height: 100vh;
+    padding-top: 1.5rem;
+    border-left: 0;
+  }
+
+  .lm-panel-inner {
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-panel * {
+    transition: none !important;
+  }
+}
