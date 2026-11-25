@@ -5,13 +5,17 @@ interface FormFieldProps {
   htmlFor: string
   error?: string
   hint?: string
+  required?: boolean
   children: ReactNode
 }
 
-export function FormField({ label, htmlFor, error, hint, children }: FormFieldProps) {
+export function FormField({ label, htmlFor, error, hint, required, children }: FormFieldProps) {
   return (
     <div className={`field${error ? ' field-invalid' : ''}`}>
-      <label htmlFor={htmlFor}>{label}</label>
+      <label htmlFor={htmlFor}>
+        {label}
+        {required && <span aria-hidden="true"> *</span>}
+      </label>
       {children}
       {hint && !error && <small className="muted">{hint}</small>}
       {error && (

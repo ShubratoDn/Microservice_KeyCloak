@@ -89,6 +89,27 @@ export const router = createBrowserRouter([
               { path: ':id', lazy: lazyPage(() => import('@/features/orders/OrderDetailPage'), 'OrderDetailPage') },
             ],
           },
+          {
+            path: 'users',
+            element: <RequirePermission permission={Permissions.USER_VIEW} />,
+            children: [
+              { index: true, lazy: lazyPage(() => import('@/features/users/UsersPage'), 'UsersPage') },
+              {
+                path: 'new',
+                element: <RequirePermission permission={Permissions.USER_ADD} />,
+                children: [
+                  { index: true, lazy: lazyPage(() => import('@/features/users/UserFormPage'), 'UserFormPage') },
+                ],
+              },
+              {
+                path: ':id/edit',
+                element: <RequirePermission permission={Permissions.USER_EDIT} />,
+                children: [
+                  { index: true, lazy: lazyPage(() => import('@/features/users/UserFormPage'), 'UserFormPage') },
+                ],
+              },
+            ],
+          },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

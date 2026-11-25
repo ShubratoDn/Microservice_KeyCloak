@@ -14,6 +14,10 @@ export const Permissions = {
   ORDER_VIEW: 'ORDER_VIEW',
   ORDER_EDIT: 'ORDER_EDIT',
   ORDER_DELETE: 'ORDER_DELETE',
+  USER_ADD: 'USER_ADD',
+  USER_VIEW: 'USER_VIEW',
+  USER_EDIT: 'USER_EDIT',
+  USER_DELETE: 'USER_DELETE',
 } as const
 
 export type Permission = (typeof Permissions)[keyof typeof Permissions]

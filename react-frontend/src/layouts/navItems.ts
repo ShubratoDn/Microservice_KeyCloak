@@ -12,4 +12,5 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { to: '/products', label: 'Products', permission: Permissions.PRODUCT_VIEW },
   { to: '/categories', label: 'Categories', permission: Permissions.PRODUCT_VIEW },
   { to: '/orders', label: 'Orders', permission: Permissions.ORDER_VIEW },
+  { to: '/users', label: 'Users', permission: Permissions.USER_VIEW },
 ]

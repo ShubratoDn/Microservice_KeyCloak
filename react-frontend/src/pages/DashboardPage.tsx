@@ -6,7 +6,7 @@ import { NAV_ITEMS } from '@/layouts/navItems'
 
 // Roles that start with one of these words are shown. Keycloak adds a few
 // built-in roles (offline_access, uma_authorization ...) that we do not need to show.
-const APP_ROLE = /^(CUSTOMER|PRODUCT|ORDER)_/
+const APP_ROLE = /^(CUSTOMER|PRODUCT|ORDER|USER)_/
 
 export function DashboardPage() {
   const { fullName, username, email, roles, can } = useCurrentUser()
