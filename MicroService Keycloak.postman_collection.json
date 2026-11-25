@@ -1848,6 +1848,338 @@
       ]
     },
     {
+      "name": "user-service",
+      "description": "Through the gateway. Get a token for admin.user first (auth folder). Needs the USER_* roles.",
+      "item": [
+        {
+          "name": "Create User (register)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('userId', pm.response.json().id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            },
+            "description": "Registers a user. Creates the Keycloak login (temporary password) and saves the profile. The username is optional (3-100 characters: letters, numbers, dot, underscore, hyphen, @); if it is left out, the email is the login name.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Rahim\",\n  \"lastName\": \"Uddin\",\n  \"email\": \"rahim.staff@example.com\",\n  \"username\": \"rahim.staff\",\n  \"phoneNumber\": \"+8801711000000\",\n  \"presentAddress\": \"12 Lake Road, Dhaka 1205\",\n  \"permanentAddress\": \"Village Road, Cumilla\",\n  \"gender\": \"MALE\",\n  \"religion\": \"ISLAM\",\n  \"userType\": \"STAFF\",\n  \"password\": \"Temp#12345\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User - Validation Error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            },
+            "description": "Missing required fields: first name, email, phone, present address, gender, user type, password.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lastName\": \"Only last name\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User - Invalid Username",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            },
+            "description": "The username has a space and is too short, so it is rejected.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Rahim\",\n  \"email\": \"bad.username@example.com\",\n  \"username\": \"a b\",\n  \"phoneNumber\": \"+8801711000001\",\n  \"presentAddress\": \"12 Lake Road, Dhaka 1205\",\n  \"gender\": \"MALE\",\n  \"userType\": \"STAFF\",\n  \"password\": \"Temp#12345\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users?page=0&size=10",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Optional filters: userType=STAFF, q=rahim (matches name, username or email)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users/{{userId}}",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "Uses the id saved by Create User."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User (change type to MANAGER)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users/{{userId}}",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "Email cannot be changed. Changing the type swaps the Keycloak roles.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Rahim\",\n  \"lastName\": \"Uddin\",\n  \"phoneNumber\": \"+8801711000000\",\n  \"presentAddress\": \"12 Lake Road, Dhaka 1205\",\n  \"permanentAddress\": \"Village Road, Cumilla\",\n  \"gender\": \"MALE\",\n  \"religion\": \"ISLAM\",\n  \"userType\": \"MANAGER\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Disable User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users/{{userId}}/status",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{userId}}",
+                "status"
+              ]
+            },
+            "description": "Disabled users cannot log in.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enabled\": false\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 204', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/users/{{userId}}",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "Deletes the Keycloak login and the profile."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "api-gateway",
       "description": "Same APIs as the services, but all calls go through the API Gateway (port 8080). The gateway finds the right service using Eureka. Start the Config Server, Discovery and the services first.",
       "item": [
@@ -2158,6 +2490,11 @@
     {
       "key": "accessToken",
       "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "1",
       "type": "string"
     }
   ],
