@@ -7,6 +7,225 @@
   },
   "item": [
     {
+      "name": "auth (Keycloak)",
+      "description": "Run one of these first. It logs in and saves the access token in {{accessToken}}. Set the clientSecret collection variable first (Keycloak > Learn_Microservices > Clients > learn-microservices-client > Credentials).",
+      "item": [
+        {
+          "name": "Get Token - admin.user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Save the token. All other requests send it automatically (collection Authorization).",
+                  "pm.collectionVariables.set('accessToken', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "admin.user",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{keycloakBaseUrl}}/realms/{{realm}}/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakBaseUrl}}"
+              ],
+              "path": [
+                "realms",
+                "{{realm}}",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "description": "All 12 roles (CUSTOMER_*, PRODUCT_*, ORDER_*)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Token - order.clerk",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Save the token. All other requests send it automatically (collection Authorization).",
+                  "pm.collectionVariables.set('accessToken', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "order.clerk",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{keycloakBaseUrl}}/realms/{{realm}}/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakBaseUrl}}"
+              ],
+              "path": [
+                "realms",
+                "{{realm}}",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "description": "ORDER_ADD, ORDER_VIEW, ORDER_EDIT, CUSTOMER_VIEW, PRODUCT_VIEW."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Token - viewer.user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Save the token. All other requests send it automatically (collection Authorization).",
+                  "pm.collectionVariables.set('accessToken', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{clientId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{clientSecret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "viewer.user",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{keycloakBaseUrl}}/realms/{{realm}}/protocol/openid-connect/token",
+              "host": [
+                "{{keycloakBaseUrl}}"
+              ],
+              "path": [
+                "realms",
+                "{{realm}}",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            },
+            "description": "Only the three *_VIEW roles."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "customer-service",
       "item": [
         {
@@ -1793,6 +2012,84 @@
             "description": "Goes to order-service through the gateway."
           },
           "response": []
+        },
+        {
+          "name": "Gateway - No Token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/customers",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers"
+              ]
+            },
+            "description": "No Authorization header, so the gateway answers 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway - Missing Role (403)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 403', function () {",
+                  "    pm.response.to.have.status(403);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayBaseUrl}}/api/v1/orders",
+              "host": [
+                "{{gatewayBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "orders"
+              ]
+            },
+            "description": "Get a token for viewer.user first. The user has no ORDER_ADD role, so the order service answers 403.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": {{customerId}},\n  \"shippingAddress\": \"12 Lake Road, Dhaka 1205, Bangladesh\",\n  \"items\": [\n    { \"productId\": {{productId}}, \"quantity\": 1 }\n  ]\n}"
+            }
+          },
+          "response": []
         }
       ]
     }
@@ -1837,6 +2134,41 @@
       "key": "gatewayBaseUrl",
       "value": "http://localhost:8080",
       "type": "string"
+    },
+    {
+      "key": "keycloakBaseUrl",
+      "value": "http://localhost:8180",
+      "type": "string"
+    },
+    {
+      "key": "realm",
+      "value": "Learn_Microservices",
+      "type": "string"
+    },
+    {
+      "key": "clientId",
+      "value": "learn-microservices-client",
+      "type": "string"
+    },
+    {
+      "key": "clientSecret",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
     }
-  ]
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  }
 }
