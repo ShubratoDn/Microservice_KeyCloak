@@ -1,0 +1,17 @@
+{
+  "clientId": "learn-microservices-web",
+  "name": "Learn Microservices Web (React)",
+  "enabled": true,
+  "protocol": "openid-connect",
+  "publicClient": true,
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+  "directAccessGrantsEnabled": false,
+  "serviceAccountsEnabled": false,
+  "redirectUris": ["http://localhost:5173/*"],
+  "webOrigins": ["http://localhost:5173"],
+  "attributes": {
+    "pkce.code.challenge.method": "S256",
+    "post.logout.redirect.uris": "http://localhost:5173/*"
+  }
+}
